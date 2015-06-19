@@ -5,13 +5,18 @@ module MethodCaching
       self.send(:include, InstanceMethods)
     end
 
-    def cache_method(method)
+    def cache_method(method, options = {})
       old = "_#{method}".to_sym
       alias_method old, method
       define_method method do |*args|
         Rails.cache.fetch(cache_key_name(method)) do
           send(old, *args)
         end
+      end
+
+      clear_methods = [options[:clear_on]].flatten.compact
+      clear_methods.each do |clear_method|
+        cache_method_clear_on(clear_method, method)
       end
     end
 
@@ -38,6 +43,14 @@ module MethodCaching
     def cache_key_name(method)
       identifier_method = self.class.send(:identifier)
       "#{self.class.to_s}_#{self.send(identifier_method)}_#{method.to_s}"
+    end
+  end
+
+  module Generic
+    include ::MethodCaching::InstanceMethods
+
+    def self.included(klass)
+      klass.send(:extend, ::MethodCaching::ClassMethods)
     end
   end
 end

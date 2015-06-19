@@ -19,7 +19,7 @@ Jeweler::Tasks.new do |gem|
   gem.license = "MIT"
   gem.summary = %Q{Simple Ruby library for caching instance method of a class}
   gem.description = %Q{Simple Ruby library for caching instance method of a class. Using Rails.cache as default caching.}
-  gem.email = "huy.ha@eastagile.com"
+  gem.email = "hhuy424@gmail.com"
   gem.authors = ["HuyHa"]
   # dependencies defined in Gemfile
 end

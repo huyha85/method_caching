@@ -16,6 +16,8 @@ or add to Gemfile
 
 ## Usage
 
+### With ActiveRecord
+
 ```ruby
 class User < ActiveRecord::Base
   method_caching
@@ -23,12 +25,27 @@ class User < ActiveRecord::Base
   def full_name
     "#{first_name} #{last_name}"
   end
-  cache_method :full_name
-  cache_method_clear_on :save, :full_name # Clear cache for method full_name whenever method 'save' is called
+  cache_method :full_name, clear_on: :save # Clear cache for method full_name whenever method 'save' is called
 end
 ```
 
-method_caching will use the record's id as the default identifier to generate the cache key. You can change the default identifier by passing custom identifier
+### Without ActiveRecord (Mongoid, etc)
+
+```ruby
+class User
+  include MethodCaching::Generic
+  method_caching
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+  cache_method :full_name, clear_on: :save # Clear cache for method full_name whenever method 'save' is called
+end
+```
+
+### Custom Identifier
+
+By default, method_caching will use the record's id as the default identifier to generate the cache key. You can change the default identifier by passing custom identifier
 
 ```ruby
 class User < ActiveRecord::Base

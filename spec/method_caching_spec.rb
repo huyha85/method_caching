@@ -1,8 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 class TestClass
-  extend MethodCaching::ClassMethods
-  include MethodCaching::InstanceMethods
+  include MethodCaching::Generic
   method_caching :identifier
 
   def method_to_be_cleared; end
@@ -10,8 +9,7 @@ class TestClass
   def method_to_be_cached
     calculate(2)
   end
-  cache_method :method_to_be_cached
-  cache_method_clear_on :method_to_be_cleared, :method_to_be_cached
+  cache_method :method_to_be_cached, clear_on: :method_to_be_cleared
 
   def identifier
     "id"
